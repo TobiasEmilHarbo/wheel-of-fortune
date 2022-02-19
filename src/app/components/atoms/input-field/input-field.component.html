@@ -1,0 +1,11 @@
+<span class="field" [formGroup]="formGroup">
+  <input [type]="type" [ngClass]="{ empty: !value, error: hasErrors() }" [formControlName]="formControlName" />
+
+  <label *ngIf="placeholder">
+    {{ placeholder }}
+  </label>
+</span>
+
+<span class="error" *ngIf="hasErrors()">
+  {{ getError() }}
+</span>

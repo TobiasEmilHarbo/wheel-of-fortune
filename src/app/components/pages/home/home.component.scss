@@ -1,0 +1,8 @@
+@use "./../../../../colors.scss" as *;
+
+p {
+  text-align: center;
+  font-style: italic;
+  font-weight: bold;
+  color: $grey-5;
+}

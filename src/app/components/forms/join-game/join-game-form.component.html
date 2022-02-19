@@ -1,0 +1,17 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <app-button-field
+    [formGroup]="form"
+    placeholder="Enter game ID"
+    formControlName="gameId"
+    type="submit"
+    [isLoading]="loading"
+    (onSubmit)="onSubmit()"
+  >
+    Join
+  </app-button-field>
+
+  <div *ngIf="(hasError('gameId') && form.touched) || error" class="error">
+    {{ getError('gameId') }}
+    {{ error }}
+  </div>
+</form>

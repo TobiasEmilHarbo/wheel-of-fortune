@@ -1,0 +1,19 @@
+<span [formGroup]="formGroup">
+  <app-input-field
+    #inputField
+    [formGroup]="formGroup"
+    [formControlName]="formControlName"
+    [placeholder]="placeholder"
+    class="uppercase flatten-right"
+  >
+  </app-input-field>
+
+  <app-button
+    [disabled]="disabled"
+    [isLoading]="isLoading"
+    (click)="onSubmit.emit($event)"
+    class="flatten-left primary"
+  >
+    <ng-content></ng-content>
+  </app-button>
+</span>

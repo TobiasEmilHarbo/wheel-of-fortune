@@ -1,0 +1,8 @@
+<button [type]="type" [attr.icon]="icon" [attr.disabled]="disabled">
+  <span *ngIf="isLoading; else done">
+    <app-loader-icon [strokeWidth]="3"></app-loader-icon>
+  </span>
+  <ng-template #done>
+    <ng-content></ng-content>
+  </ng-template>
+</button>
