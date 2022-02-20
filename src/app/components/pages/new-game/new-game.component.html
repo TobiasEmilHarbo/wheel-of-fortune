@@ -1,0 +1,8 @@
+<h1>{{ game?.id }}</h1>
+
+<app-game-sentence-form
+  (onSubmit)="submit($event)"
+  [isLoading]="loading"
+></app-game-sentence-form>
+
+<p>{{ game?.sentence }}</p>

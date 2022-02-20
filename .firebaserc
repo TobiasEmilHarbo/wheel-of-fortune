@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "online-wheel-of-fortune"
+  },
+  "targets": {
+    "online-wheel-of-fortune": {
+      "hosting": {
+        "wheel-of-fortune": [
+          "spin-of-fortune"
+        ]
+      }
+    }
   }
 }

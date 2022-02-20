@@ -103,6 +103,16 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "wheel-of-fortune:build:production",
+            "firebaseProject": "online-wheel-of-fortune",
+            "firebaseHostingSite": "spin-of-fortune"
+          }
         }
       }
     }

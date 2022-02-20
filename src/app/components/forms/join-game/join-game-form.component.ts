@@ -10,10 +10,10 @@ export class JoinGameFormComponent {
   public loading!: boolean;
   public error: string | null = null;
 
-  public gameIdInputName: string = 'gameId';
+  public gameIdInput: string = 'gameId';
 
   public form: FormGroup = new FormGroup({
-    [this.gameIdInputName]: new FormControl({ value: null, disabled: false }, [
+    [this.gameIdInput]: new FormControl({ value: null, disabled: false }, [
       Validators.pattern('[a-zA-Z0-9]*'),
       Validators.minLength(5),
       Validators.required,
@@ -25,7 +25,7 @@ export class JoinGameFormComponent {
       [rule: string]: string;
     };
   } = {
-    [this.gameIdInputName]: {
+    [this.gameIdInput]: {
       required: 'Please enter an ID',
       pattern: 'ID can only contain letters and numbers',
       minlength: 'ID must be at least 5 characters long',
@@ -36,7 +36,7 @@ export class JoinGameFormComponent {
   };
 
   public onSubmit() {
-    const gameId = this.form.get('gameId')?.value;
+    const gameId = this.form.get(this.gameIdInput)?.value;
     console.log('GAME ID', gameId);
     this.form.markAllAsTouched();
 

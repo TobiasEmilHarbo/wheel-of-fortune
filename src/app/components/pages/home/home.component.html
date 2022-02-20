@@ -1,4 +1,11 @@
-<app-button type="button" class="primary"> Create new game </app-button>
+<app-button
+  type="button"
+  class="primary"
+  [isLoading]="loadingNewGame"
+  (click)="createNewGame()"
+>
+  Create new game
+</app-button>
 
 <p>&mdash; or &mdash;</p>
 

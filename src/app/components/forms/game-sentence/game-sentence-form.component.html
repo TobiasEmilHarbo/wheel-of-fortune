@@ -1,0 +1,17 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <app-textarea
+    [formGroup]="form"
+    placeholder="Game sentence"
+    [formControlName]="gameSentenceInput"
+  ></app-textarea>
+
+  <app-button type="submit" [isLoading]="isLoading">Start game</app-button>
+
+  <div
+    *ngIf="(hasError(gameSentenceInput) && form.touched) || error"
+    class="error"
+  >
+    {{ getError(gameSentenceInput) }}
+    {{ error }}
+  </div>
+</form>

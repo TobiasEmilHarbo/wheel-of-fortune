@@ -2,7 +2,7 @@
   <app-button-field
     [formGroup]="form"
     placeholder="Enter game ID"
-    formControlName="gameId"
+    [formControlName]="gameIdInput"
     type="submit"
     [isLoading]="loading"
     (onSubmit)="onSubmit()"
@@ -10,8 +10,8 @@
     Join
   </app-button-field>
 
-  <div *ngIf="(hasError('gameId') && form.touched) || error" class="error">
-    {{ getError('gameId') }}
+  <div *ngIf="(hasError(gameIdInput) && form.touched) || error" class="error">
+    {{ getError(gameIdInput) }}
     {{ error }}
   </div>
 </form>

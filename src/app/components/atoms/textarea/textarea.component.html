@@ -1,0 +1,14 @@
+<span class="field" [formGroup]="formGroup">
+  <textarea
+    [ngClass]="{ empty: !value, error: hasErrors() }"
+    [formControlName]="formControlName"
+  ></textarea>
+
+  <label *ngIf="placeholder">
+    {{ placeholder }}
+  </label>
+</span>
+
+<span class="error" *ngIf="hasErrors()">
+  {{ getError() }}
+</span>
