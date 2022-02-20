@@ -1,0 +1,17 @@
+<form [formGroup]="form">
+  <app-button-field
+    [formGroup]="form"
+    placeholder="Letter guess"
+    [formControlName]="letterInput"
+    type="submit"
+    [isLoading]="isLoading"
+    (onSubmit)="submit()"
+  >
+    Evaluate
+  </app-button-field>
+
+  <div *ngIf="(hasError(letterInput) && form.touched) || error" class="error">
+    {{ getError(letterInput) }}
+    {{ error }}
+  </div>
+</form>

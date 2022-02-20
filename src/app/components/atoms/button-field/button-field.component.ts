@@ -28,20 +28,14 @@ import {
 export class ButtonFieldComponent implements ControlValueAccessor {
   @Output() public onSubmit = new EventEmitter<MouseEvent>();
 
-  //@ts-ignore
-  @Input() public placeholder: string;
-  //@ts-ignore
-  @Input() public buttonValue: string;
-  //@ts-ignore
-  @Input() public isLoading: boolean;
+  @Input() public placeholder!: string;
+  @Input() public buttonValue!: string;
+  @Input() public isLoading!: boolean;
+  @Input() public formGroup!: FormGroup;
+  @Input() public formControlName!: string;
 
-  //@ts-ignore
-  @Input() public formGroup: FormGroup;
-  //@ts-ignore
-  @Input() public formControlName: string;
-
-  @Input() public set disabled(disabeld: boolean) {
-    if (disabeld) this.formGroup.disable();
+  @Input() public set disabled(disabled: boolean) {
+    if (disabled) this.formGroup.disable();
     else this.formGroup.enable();
   }
 

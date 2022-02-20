@@ -1,0 +1,15 @@
+<span *ngFor="let word of words">
+  <span
+    *ngFor="let letter of word"
+    [ngClass]="{ letter: true, guessed: letter.guessed }"
+  >
+    {{ letter.character }}
+  </span>
+  &nbsp; &nbsp;
+</span>
+
+<br />
+
+<span *ngFor="let letter of guesses">
+  {{ letter }}
+</span>

@@ -25,6 +25,8 @@ import { providePerformance, getPerformance } from '@angular/fire/performance';
 import { GameSentenceFormComponent } from './components/forms/game-sentence/game-sentence-form.component';
 import { CookieService } from 'ngx-cookie-service';
 import { TextareaComponent } from './components/atoms/textarea/textarea.component';
+import { LetterGuessFormComponent } from './components/forms/letter-guess/letter-guess-form.component';
+import { GameMasterSentenceDisplayComponent } from './components/molecules/game-master-sentence-display/game-master-sentence-display.component';
 
 import * as config from './../../firebase-app-config.json';
 
@@ -33,12 +35,14 @@ import * as config from './../../firebase-app-config.json';
     AppComponent,
     HomeComponent,
     ButtonComponent,
+    NewGameComponent,
     TextareaComponent,
     InputFieldComponent,
     ButtonFieldComponent,
     JoinGameFormComponent,
-    NewGameComponent,
+    LetterGuessFormComponent,
     GameSentenceFormComponent,
+    GameMasterSentenceDisplayComponent,
   ],
   imports: [
     BrowserModule,

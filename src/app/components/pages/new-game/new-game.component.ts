@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   doc,
   DocumentData,
@@ -12,6 +12,7 @@ import { ActivatedRoute, Data } from '@angular/router';
 import { first } from 'rxjs';
 import { PATH } from 'src/app/app-routing.module';
 import Game from 'src/app/dto/Game';
+import { LetterGuessFormComponent } from '../../forms/letter-guess/letter-guess-form.component';
 
 @Component({
   selector: 'app-new-game',
@@ -19,9 +20,13 @@ import Game from 'src/app/dto/Game';
   styleUrls: ['./new-game.component.scss'],
 })
 export class NewGameComponent implements OnInit, OnDestroy {
-  public loading = true;
+  public gameLoading = true;
+  public gameSentenceLoading = false;
   public game!: Game;
   private gameListenerUnsubscribe!: Unsubscribe;
+
+  @ViewChild(LetterGuessFormComponent)
+  letterGuessForm!: LetterGuessFormComponent;
 
   constructor(private db: Firestore, private route: ActivatedRoute) {}
 
@@ -33,7 +38,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
         doc(this.db, PATH.GAMES, game.id),
         (doc: DocumentSnapshot<DocumentData>) => {
           this.game = doc.data() as Game;
-          this.loading = false;
+          this.gameLoading = false;
         }
       );
     });
@@ -43,15 +48,37 @@ export class NewGameComponent implements OnInit, OnDestroy {
     this.gameListenerUnsubscribe?.();
   }
 
-  public async submit(sentence: string): Promise<void> {
-    this.loading = true;
+  public async submitSentence(sentence: string): Promise<void> {
+    this.gameLoading = true;
 
     await setDoc(
       doc(this.db, PATH.GAMES, this.game.id),
       {
-        sentence: sentence,
+        sentence: sentence.toUpperCase(),
       } as Game,
       { merge: true }
     );
+  }
+
+  public async submitLetterGuess(letter: string): Promise<void> {
+    console.log(letter);
+    this.gameSentenceLoading = true;
+
+    if (this.game.guesses.includes(letter)) {
+      this.gameSentenceLoading = false;
+      this.letterGuessForm.reset();
+      return;
+    }
+
+    await setDoc(
+      doc(this.db, PATH.GAMES, this.game.id),
+      {
+        guesses: [...this.game.guesses, letter],
+      } as Game,
+      { merge: true }
+    );
+
+    this.gameSentenceLoading = false;
+    this.letterGuessForm.reset();
   }
 }
