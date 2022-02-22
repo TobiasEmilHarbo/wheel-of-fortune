@@ -1,19 +1,27 @@
 <h1>{{ game?.id }}</h1>
 
-<div *ngIf="!game?.sentence; else gameStart">
-  <app-game-sentence-form
-    (onSubmit)="submitSentence($event)"
-    [isLoading]="gameLoading"
-  ></app-game-sentence-form>
+<div *ngIf="isGameMaster">
+  <div *ngIf="!game?.sentence; else gameStart">
+    <app-game-sentence-form
+      (onSubmit)="submitSentence($event)"
+      [isLoading]="gameLoading"
+    ></app-game-sentence-form>
+  </div>
+
+  <ng-template #gameStart>
+    <app-game-master-sentence-display
+      [sentence]="game.sentence"
+      [guesses]="game.guesses"
+    ></app-game-master-sentence-display>
+    <app-letter-guess-form
+      [isLoading]="gameSentenceLoading"
+      (onSubmit)="submitLetterGuess($event)"
+    ></app-letter-guess-form>
+  </ng-template>
 </div>
 
-<ng-template #gameStart>
-  <app-game-master-sentence-display
-    [sentence]="game.sentence"
-    [guesses]="game.guesses"
-  ></app-game-master-sentence-display>
-  <app-letter-guess-form
-    [isLoading]="gameSentenceLoading"
-    (onSubmit)="submitLetterGuess($event)"
-  ></app-letter-guess-form>
-</ng-template>
+<app-sentence-display
+  *ngIf="game?.sentence"
+  [sentence]="game.sentence"
+  [guesses]="game.guesses"
+></app-sentence-display>

@@ -14,7 +14,6 @@ export class GameMasterSentenceDisplayComponent implements OnInit {
   @Input() public sentence!: string;
 
   private _guesses!: Array<String>;
-
   public words!: Array<Array<Letter>>;
 
   public ngOnInit(): void {
@@ -36,7 +35,7 @@ export class GameMasterSentenceDisplayComponent implements OnInit {
       word.split('').map((letter) => {
         return {
           character: letter,
-          guessed: this._guesses.includes(letter),
+          guessed: this._guesses?.includes(letter),
         };
       })
     );

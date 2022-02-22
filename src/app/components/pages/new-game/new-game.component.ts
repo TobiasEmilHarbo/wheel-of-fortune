@@ -9,6 +9,7 @@ import {
   Unsubscribe,
 } from '@angular/fire/firestore';
 import { ActivatedRoute, Data } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 import { first } from 'rxjs';
 import { PATH } from 'src/app/app-routing.module';
 import Game from 'src/app/dto/Game';
@@ -23,14 +24,21 @@ export class NewGameComponent implements OnInit, OnDestroy {
   public gameLoading = true;
   public gameSentenceLoading = false;
   public game!: Game;
+  private playerId!: string;
   private gameListenerUnsubscribe!: Unsubscribe;
 
   @ViewChild(LetterGuessFormComponent)
   letterGuessForm!: LetterGuessFormComponent;
 
-  constructor(private db: Firestore, private route: ActivatedRoute) {}
+  constructor(
+    private db: Firestore,
+    private route: ActivatedRoute,
+    private cookies: CookieService
+  ) {}
 
   public ngOnInit(): void {
+    const appName = this.db.app.name;
+    this.playerId = this.cookies.get(appName);
     this.route.data.pipe(first()).subscribe((routeData: Data) => {
       const game = routeData[0] as Game;
 
@@ -42,6 +50,10 @@ export class NewGameComponent implements OnInit, OnDestroy {
         }
       );
     });
+  }
+
+  public get isGameMaster(): boolean {
+    return this.playerId == this.game?.gameMaster;
   }
 
   public ngOnDestroy(): void {
@@ -61,19 +73,20 @@ export class NewGameComponent implements OnInit, OnDestroy {
   }
 
   public async submitLetterGuess(letter: string): Promise<void> {
-    console.log(letter);
     this.gameSentenceLoading = true;
 
-    if (this.game.guesses.includes(letter)) {
+    if (this.game.guesses?.includes(letter)) {
       this.gameSentenceLoading = false;
       this.letterGuessForm.reset();
       return;
     }
 
+    const previousGuesses = this.game?.guesses ? this.game.guesses : [];
+
     await setDoc(
       doc(this.db, PATH.GAMES, this.game.id),
       {
-        guesses: [...this.game.guesses, letter],
+        guesses: [...previousGuesses, letter],
       } as Game,
       { merge: true }
     );

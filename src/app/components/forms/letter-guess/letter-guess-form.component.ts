@@ -38,18 +38,15 @@ export class LetterGuessFormComponent {
   }
 
   @Input() public set isLoading(loading: boolean) {
-    console.log('LOADING', loading);
     if (!loading) this.form.reset();
     this._isLoading = loading;
   }
 
   public submit() {
     this.form.markAllAsTouched();
-
     if (this.form.invalid) return;
 
     const letter = this.form.get(this.letterInput)?.value;
-
     this.onSubmit.emit(letter.toUpperCase());
   }
 

@@ -1,0 +1,9 @@
+<app-flip-letter
+  *ngFor="let letter of letterPositions"
+  [ngClass]="{
+    reveal: letter.guessed,
+    'light-up': letter.guessed,
+    blank: letter.isBlack
+  }"
+  >{{ letter.character }}</app-flip-letter
+>

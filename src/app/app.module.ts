@@ -27,6 +27,8 @@ import { CookieService } from 'ngx-cookie-service';
 import { TextareaComponent } from './components/atoms/textarea/textarea.component';
 import { LetterGuessFormComponent } from './components/forms/letter-guess/letter-guess-form.component';
 import { GameMasterSentenceDisplayComponent } from './components/molecules/game-master-sentence-display/game-master-sentence-display.component';
+import { SentenceDisplayComponent } from './components/molecules/sentence-display/sentence-display.component';
+import { FlipLetterComponent } from './components/atoms/flip-letter/flip-letter.component';
 
 import * as config from './../../firebase-app-config.json';
 
@@ -43,6 +45,8 @@ import * as config from './../../firebase-app-config.json';
     LetterGuessFormComponent,
     GameSentenceFormComponent,
     GameMasterSentenceDisplayComponent,
+    SentenceDisplayComponent,
+    FlipLetterComponent,
   ],
   imports: [
     BrowserModule,
