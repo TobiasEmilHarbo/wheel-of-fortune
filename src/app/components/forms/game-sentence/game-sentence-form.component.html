@@ -1,4 +1,10 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
+  <app-input-field
+    [formGroup]="form"
+    placeholder="Category"
+    [formControlName]="categoryInput"
+  ></app-input-field>
+
   <app-textarea
     [formGroup]="form"
     placeholder="Game sentence"
@@ -8,10 +14,12 @@
   <app-button type="submit" [isLoading]="isLoading">Start game</app-button>
 
   <div
-    *ngIf="(hasError(gameSentenceInput) && form.touched) || error"
+    *ngIf="hasError(gameSentenceInput) || hasError(categoryInput) || error"
     class="error"
   >
-    {{ getError(gameSentenceInput) }}
+    <p>{{ getError(gameSentenceInput) }}</p>
+    <p>{{ getError(categoryInput) }}</p>
+
     {{ error }}
   </div>
 </form>

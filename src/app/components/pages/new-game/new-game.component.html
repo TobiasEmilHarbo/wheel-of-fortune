@@ -1,6 +1,4 @@
-<h1>{{ game?.id }}</h1>
-
-<div *ngIf="isGameMaster">
+<div *ngIf="isGameMaster; else playerDisplay">
   <div *ngIf="!game?.sentence; else gameStart">
     <app-game-sentence-form
       (onSubmit)="submitSentence($event)"
@@ -20,8 +18,11 @@
   </ng-template>
 </div>
 
-<app-sentence-display
-  *ngIf="game?.sentence"
-  [sentence]="game.sentence"
-  [guesses]="game.guesses"
-></app-sentence-display>
+<ng-template #playerDisplay>
+  <h1>{{ game?.category }}</h1>
+  <app-sentence-display
+    *ngIf="game?.sentence"
+    [sentence]="game.sentence"
+    [guesses]="game.guesses"
+  ></app-sentence-display>
+</ng-template>

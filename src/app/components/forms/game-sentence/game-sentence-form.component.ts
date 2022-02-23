@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-
+import Game from 'src/app/dto/Game';
 @Component({
   selector: 'app-game-sentence-form',
   templateUrl: './game-sentence-form.component.html',
@@ -8,17 +8,21 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 })
 export class GameSentenceFormComponent {
   @Input() public isLoading!: boolean;
-  @Output() public onSubmit = new EventEmitter<string>();
+  @Output() public onSubmit = new EventEmitter<Game>();
 
   public error: string | null = null;
 
   public gameSentenceInput: string = 'gameSentence';
+  public categoryInput: string = 'category';
 
   public form: FormGroup = new FormGroup({
     [this.gameSentenceInput]: new FormControl(
       { value: null, disabled: false },
       [Validators.required]
     ),
+    [this.categoryInput]: new FormControl({ value: null, disabled: false }, [
+      Validators.required,
+    ]),
   });
 
   public errors: {
@@ -26,6 +30,9 @@ export class GameSentenceFormComponent {
       [rule: string]: string;
     };
   } = {
+    [this.categoryInput]: {
+      required: 'Please enter a category',
+    },
     [this.gameSentenceInput]: {
       required: 'Please enter a sentence',
     },
@@ -33,12 +40,16 @@ export class GameSentenceFormComponent {
 
   public submit() {
     const sentence = this.form.get(this.gameSentenceInput)?.value;
+    const category = this.form.get(this.categoryInput)?.value;
 
     this.form.markAllAsTouched();
 
     if (this.form.invalid) return;
 
-    this.onSubmit.emit(sentence);
+    this.onSubmit.emit({
+      sentence,
+      category,
+    } as Game);
   }
 
   public hasError(fieldName: string): boolean {

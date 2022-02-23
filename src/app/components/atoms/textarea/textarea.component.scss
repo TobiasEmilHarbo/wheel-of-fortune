@@ -5,7 +5,7 @@
 
 :host {
   display: grid;
-  height: 80px;
+  min-height: 112px;
   font-size: 16px;
 
   span.field {
@@ -33,6 +33,7 @@
     }
 
     textarea {
+      display: block;
       resize: none;
       font-family: inherit;
       border: solid $grey-1 1px;
@@ -40,7 +41,7 @@
       border-bottom-width: 4px;
       font-size: 16px;
       line-height: 24px;
-      height: inherit;
+      height: 88px;
       background-color: rgba(0, 0, 0, 0.04);
       border-radius: 4px;
       color: rgb(65, 65, 65);

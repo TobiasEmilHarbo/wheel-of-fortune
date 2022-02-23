@@ -60,13 +60,14 @@ export class NewGameComponent implements OnInit, OnDestroy {
     this.gameListenerUnsubscribe?.();
   }
 
-  public async submitSentence(sentence: string): Promise<void> {
+  public async submitSentence(game: Game): Promise<void> {
     this.gameLoading = true;
 
     await setDoc(
       doc(this.db, PATH.GAMES, this.game.id),
       {
-        sentence: sentence.toUpperCase(),
+        category: game.category.toLowerCase(),
+        sentence: game.sentence.toLowerCase(),
       } as Game,
       { merge: true }
     );
