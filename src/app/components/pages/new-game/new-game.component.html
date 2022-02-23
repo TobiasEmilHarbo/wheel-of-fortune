@@ -11,6 +11,8 @@
       [sentence]="game.sentence"
       [guesses]="game.guesses"
     ></app-game-master-sentence-display>
+    <br />
+    <br />
     <app-letter-guess-form
       [isLoading]="gameSentenceLoading"
       (onSubmit)="submitLetterGuess($event)"

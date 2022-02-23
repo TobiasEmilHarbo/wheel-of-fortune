@@ -1,8 +1,10 @@
 @use "./../../../../colors" as *;
 span.letter {
   color: $grey-5;
+  font-size: 32px;
 
   &.guessed {
     color: $green-v-5;
+    font-weight: bold;
   }
 }
