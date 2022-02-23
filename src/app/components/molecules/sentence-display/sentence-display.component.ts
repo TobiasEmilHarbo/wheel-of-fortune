@@ -53,8 +53,7 @@ export class SentenceDisplayComponent implements OnInit {
 
     words.forEach((word) => {
       const currentLineLength = this.getLineLength(lines[currentLineIndex]);
-
-      if (word.length + currentLineLength > maxLineLength) {
+      if (word.length + 1 + currentLineLength > maxLineLength) {
         currentLineIndex++;
         lines[currentLineIndex] = [];
       }
@@ -76,7 +75,8 @@ export class SentenceDisplayComponent implements OnInit {
     }
 
     this.letterPositions = lines.flatMap((line) => {
-      const paddingLength = maxLineLength - this.getLineLength(line);
+      const lineLength = this.getLineLength(line);
+      const paddingLength = maxLineLength - lineLength;
 
       const rightPadding: Array<BlankPosition> = [];
       rightPadding.length = Math.floor(paddingLength / 2);
@@ -121,7 +121,7 @@ export class SentenceDisplayComponent implements OnInit {
   }
 
   private getSentenceSpaces(words: Array<string>): number {
-    return words?.length ?? 0 > 0 ? words.length - 1 : 0;
+    return (words?.length ?? 0) > 0 ? words.length - 1 : 0;
   }
 
   @Input() public set guesses(guesses: Array<string>) {

@@ -37,8 +37,19 @@
       background-color: transparent;
     }
 
-    span.loader {
+    span.content {
+      grid-row: 1;
+      grid-column: 1;
+
+      &.hide {
+        opacity: 0;
+      }
+    }
+
+    app-loader-icon {
       display: grid;
+      grid-row: 1;
+      grid-column: 1;
       align-items: center;
       justify-items: center;
     }

@@ -28,7 +28,7 @@ export class LetterGuessFormComponent {
   } = {
     [this.letterInput]: {
       required: 'Please enter a letter',
-      pattern: 'Guess can only contain letters',
+      pattern: 'Must be a letter',
       maxlength: 'Only one character at a time',
     },
   };

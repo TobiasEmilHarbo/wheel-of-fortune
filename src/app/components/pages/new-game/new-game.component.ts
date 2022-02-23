@@ -66,8 +66,8 @@ export class NewGameComponent implements OnInit, OnDestroy {
     await setDoc(
       doc(this.db, PATH.GAMES, this.game.id),
       {
-        category: game.category.toLowerCase(),
-        sentence: game.sentence.toLowerCase(),
+        category: game.category.toUpperCase(),
+        sentence: game.sentence.toUpperCase(),
       } as Game,
       { merge: true }
     );
