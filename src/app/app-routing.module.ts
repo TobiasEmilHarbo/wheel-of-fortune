@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { GameComponent } from './components/pages/game/game.component';
 import { HomeComponent } from './components/pages/home/home.component';
-import { NewGameComponent } from './components/pages/new-game/new-game.component';
 import { GameGuard } from './guards/game.guard';
 
 export enum PATH {
@@ -15,7 +15,7 @@ const routes: Routes = [
   },
   {
     path: `${PATH.GAMES}/:id`,
-    component: NewGameComponent,
+    component: GameComponent,
     resolve: [GameGuard],
   },
 ];

@@ -9,7 +9,6 @@ import { InputFieldComponent } from './components/atoms/input-field/input-field.
 import { JoinGameFormComponent } from './components/forms/join-game/join-game-form.component';
 import { HomeComponent } from './components/pages/home/home.component';
 import { IconsModule } from './templates/icons.module';
-import { NewGameComponent } from './components/pages/new-game/new-game.component';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import {
@@ -31,13 +30,13 @@ import { SentenceDisplayComponent } from './components/molecules/sentence-displa
 import { FlipLetterComponent } from './components/atoms/flip-letter/flip-letter.component';
 
 import * as config from './../../firebase-app-config.json';
+import { GameComponent } from './components/pages/game/game.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     ButtonComponent,
-    NewGameComponent,
     TextareaComponent,
     InputFieldComponent,
     ButtonFieldComponent,
@@ -47,6 +46,7 @@ import * as config from './../../firebase-app-config.json';
     GameMasterSentenceDisplayComponent,
     SentenceDisplayComponent,
     FlipLetterComponent,
+    GameComponent,
   ],
   imports: [
     BrowserModule,

@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { collection, doc, Firestore, setDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { PATH } from 'src/app/app-routing.module';
+import Game from 'src/app/dto/Game';
+import GameRound from 'src/app/dto/GameRound';
 
 @Component({
   selector: 'app-home',
@@ -11,23 +14,36 @@ import { CookieService } from 'ngx-cookie-service';
 export class HomeComponent {
   public loadingNewGame = false;
 
+  private firstRound: number = 1;
+
   constructor(
     private cookies: CookieService,
-    private firestore: Firestore,
+    private db: Firestore,
     private router: Router
   ) {}
 
   public async createNewGame(): Promise<void> {
     this.loadingNewGame = true;
-    const appName = this.firestore.app.name;
+    const appName = this.db.app.name;
     const playerId = this.cookies.get(appName);
-    const newGameDoc = doc(collection(this.firestore, 'games'));
-    await setDoc(newGameDoc, {
-      id: newGameDoc.id,
+    const newGame = doc(collection(this.db, PATH.GAMES));
+    await setDoc(newGame, {
+      id: newGame.id,
       gameMaster: playerId,
-    });
+      rounds: {},
+    } as Game);
 
-    this.router.navigate(['games', newGameDoc.id]);
+    await setDoc(
+      doc(this.db, PATH.GAMES, newGame.id),
+      {
+        rounds: {
+          [this.firstRound]: {},
+        },
+      } as Game,
+      { merge: true }
+    );
+
+    this.router.navigate([PATH.GAMES, newGame.id]);
     this.loadingNewGame = false;
   }
 }

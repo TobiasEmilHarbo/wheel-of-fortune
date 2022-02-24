@@ -1,15 +1,15 @@
 <div *ngIf="isGameMaster; else playerDisplay">
-  <div *ngIf="!game?.sentence; else gameStart">
+  <div *ngIf="!sentence; else gameStart">
     <app-game-sentence-form
-      (onSubmit)="submitSentence($event)"
+      (onSubmit)="startNewRound($event)"
       [isLoading]="gameLoading"
     ></app-game-sentence-form>
   </div>
 
   <ng-template #gameStart>
     <app-game-master-sentence-display
-      [sentence]="game.sentence"
-      [guesses]="game.guesses"
+      [sentence]="sentence"
+      [guesses]="guesses"
     ></app-game-master-sentence-display>
     <br />
     <br />
@@ -17,14 +17,16 @@
       [isLoading]="gameSentenceLoading"
       (onSubmit)="submitLetterGuess($event)"
     ></app-letter-guess-form>
+
+    <app-button (click)="endCurrentRound()">New Round</app-button>
   </ng-template>
 </div>
 
 <ng-template #playerDisplay>
-  <h1>{{ game?.category }}</h1>
+  <h1>{{ category }}</h1>
   <app-sentence-display
-    *ngIf="game?.sentence"
-    [sentence]="game.sentence"
-    [guesses]="game.guesses"
+    *ngIf="sentence"
+    [sentence]="sentence"
+    [guesses]="guesses"
   ></app-sentence-display>
 </ng-template>

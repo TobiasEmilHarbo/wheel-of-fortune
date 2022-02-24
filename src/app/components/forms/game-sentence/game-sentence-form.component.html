@@ -11,7 +11,7 @@
     [formControlName]="gameSentenceInput"
   ></app-textarea>
 
-  <app-button type="submit" [isLoading]="isLoading">Start game</app-button>
+  <app-button type="submit" [isLoading]="isLoading">Start round</app-button>
 
   <div
     *ngIf="hasError(gameSentenceInput) || hasError(categoryInput) || error"

@@ -13,14 +13,15 @@ import { CookieService } from 'ngx-cookie-service';
 import { first } from 'rxjs';
 import { PATH } from 'src/app/app-routing.module';
 import Game from 'src/app/dto/Game';
+import GameRound from 'src/app/dto/GameRound';
 import { LetterGuessFormComponent } from '../../forms/letter-guess/letter-guess-form.component';
 
 @Component({
-  selector: 'app-new-game',
-  templateUrl: './new-game.component.html',
-  styleUrls: ['./new-game.component.scss'],
+  selector: 'app-game',
+  templateUrl: './game.component.html',
+  styleUrls: ['./game.component.scss'],
 })
-export class NewGameComponent implements OnInit, OnDestroy {
+export class GameComponent implements OnInit, OnDestroy {
   public gameLoading = true;
   public gameSentenceLoading = false;
   public game!: Game;
@@ -60,14 +61,34 @@ export class NewGameComponent implements OnInit, OnDestroy {
     this.gameListenerUnsubscribe?.();
   }
 
-  public async submitSentence(game: Game): Promise<void> {
+  public async startNewRound(game: Game): Promise<void> {
     this.gameLoading = true;
+
+    const currentRound = this.getRoundCount();
 
     await setDoc(
       doc(this.db, PATH.GAMES, this.game.id),
       {
-        category: game.category.toUpperCase(),
-        sentence: game.sentence.toUpperCase(),
+        rounds: {
+          [currentRound]: {
+            category: game.category.toUpperCase(),
+            sentence: game.sentence.toUpperCase(),
+          },
+        },
+      } as Game,
+      { merge: true }
+    );
+  }
+
+  public async endCurrentRound(): Promise<void> {
+    const currentRound = this.getRoundCount() + 1;
+
+    await setDoc(
+      doc(this.db, PATH.GAMES, this.game.id),
+      {
+        rounds: {
+          [currentRound]: {},
+        },
       } as Game,
       { merge: true }
     );
@@ -82,17 +103,44 @@ export class NewGameComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const previousGuesses = this.game?.guesses ? this.game.guesses : [];
+    const currentRoundCount = this.getRoundCount();
+    const currentRound = this.game.rounds[currentRoundCount];
+
+    const previousGuesses = currentRound?.guesses ? currentRound.guesses : [];
 
     await setDoc(
       doc(this.db, PATH.GAMES, this.game.id),
       {
-        guesses: [...previousGuesses, letter],
+        rounds: {
+          [currentRoundCount]: {
+            guesses: [...previousGuesses, letter],
+          },
+        },
       } as Game,
       { merge: true }
     );
 
     this.gameSentenceLoading = false;
     this.letterGuessForm.reset();
+  }
+
+  private getRoundCount(): number {
+    return Object.keys(this.game?.rounds ?? {}).length;
+  }
+
+  private getCurrentRound(): GameRound {
+    return this.game?.rounds?.[this.getRoundCount()];
+  }
+
+  public get category(): string {
+    return this.getCurrentRound()?.category;
+  }
+
+  public get sentence(): string {
+    return this.getCurrentRound()?.sentence;
+  }
+
+  public get guesses(): Array<string> {
+    return this.getCurrentRound()?.guesses;
   }
 }
