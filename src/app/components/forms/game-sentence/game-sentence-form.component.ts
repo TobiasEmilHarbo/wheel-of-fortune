@@ -1,6 +1,23 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  ValidatorFn,
+  ValidationErrors,
+  AbstractControl,
+} from '@angular/forms';
 import Game from 'src/app/dto/Game';
+
+function maxSentenceLength(maxSentenceLength: number): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const forbidden = control.value
+      ?.split(' ')
+      .find((word: string) => word.length > maxSentenceLength);
+    return !!forbidden ? { wordMaxLength: { value: control.value } } : null;
+  };
+}
+
 @Component({
   selector: 'app-game-sentence-form',
   templateUrl: './game-sentence-form.component.html',
@@ -16,13 +33,17 @@ export class GameSentenceFormComponent {
   public categoryInput: string = 'category';
 
   public form: FormGroup = new FormGroup({
-    [this.gameSentenceInput]: new FormControl(
-      { value: null, disabled: false },
-      [Validators.required]
-    ),
     [this.categoryInput]: new FormControl({ value: null, disabled: false }, [
       Validators.required,
     ]),
+    [this.gameSentenceInput]: new FormControl(
+      { value: null, disabled: false },
+      [
+        Validators.required,
+        Validators.pattern(/^[\p{L}\s\-,]*$/gu),
+        maxSentenceLength(11),
+      ]
+    ),
   });
 
   public errors: {
@@ -35,6 +56,8 @@ export class GameSentenceFormComponent {
     },
     [this.gameSentenceInput]: {
       required: 'Please enter a sentence',
+      pattern: 'Hello',
+      wordMaxLength: 'Words cannot exceed a length of 11',
     },
   };
 

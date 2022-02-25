@@ -44,8 +44,7 @@ export class ButtonFieldComponent implements ControlValueAccessor {
   }
 
   @ViewChild(InputFieldComponent, { static: true })
-  //@ts-ignore
-  private _inputField: InputFieldComponent;
+  private _inputField!: InputFieldComponent;
 
   public writeValue(value: string): void {
     this._inputField.writeValue(value);
@@ -61,6 +60,10 @@ export class ButtonFieldComponent implements ControlValueAccessor {
 
   public setDisabledState(isDisabled: boolean): void {
     this._inputField.setDisabledState(isDisabled);
+  }
+
+  public submit($event: MouseEvent) {
+    this.onSubmit.emit($event);
   }
 
   public get value(): string {

@@ -1,4 +1,4 @@
-<span [formGroup]="formGroup">
+<form [formGroup]="formGroup" (ngSubmit)="submit($event)">
   <app-input-field
     #inputField
     [formGroup]="formGroup"
@@ -11,9 +11,9 @@
   <app-button
     [disabled]="disabled"
     [isLoading]="isLoading"
-    (click)="onSubmit.emit($event)"
+    type="submit"
     class="flatten-left primary"
   >
     <ng-content></ng-content>
   </app-button>
-</span>
+</form>
