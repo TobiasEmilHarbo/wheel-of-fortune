@@ -23,6 +23,7 @@ import { LetterGuessFormComponent } from '../../forms/letter-guess/letter-guess-
 })
 export class GameComponent implements OnInit, OnDestroy {
   public gameLoading = true;
+  public revealLoading = false;
   public gameSentenceLoading = false;
   public game!: Game;
   private playerId!: string;
@@ -61,7 +62,26 @@ export class GameComponent implements OnInit, OnDestroy {
     this.gameListenerUnsubscribe?.();
   }
 
-  public async startNewRound(game: Game): Promise<void> {
+  public async revealSentence(): Promise<void> {
+    this.revealLoading = true;
+    const currentRound = this.getRoundCount();
+
+    await setDoc(
+      doc(this.db, PATH.GAMES, this.game.id),
+      {
+        rounds: {
+          [currentRound]: {
+            isReveal: true,
+          },
+        },
+      } as Game,
+      { merge: true }
+    );
+
+    this.revealLoading = false;
+  }
+
+  public async startRound(game: GameRound): Promise<void> {
     this.gameLoading = true;
 
     const currentRound = this.getRoundCount();
@@ -80,7 +100,7 @@ export class GameComponent implements OnInit, OnDestroy {
     );
   }
 
-  public async endCurrentRound(): Promise<void> {
+  public async endRound(): Promise<void> {
     const currentRound = this.getRoundCount() + 1;
 
     await setDoc(
@@ -97,7 +117,9 @@ export class GameComponent implements OnInit, OnDestroy {
   public async submitLetterGuess(letter: string): Promise<void> {
     this.gameSentenceLoading = true;
 
-    if (this.game.guesses?.includes(letter)) {
+    const round = this.getCurrentRound();
+
+    if (round.guesses?.includes(letter)) {
       this.gameSentenceLoading = false;
       this.letterGuessForm.reset();
       return;
@@ -130,6 +152,10 @@ export class GameComponent implements OnInit, OnDestroy {
 
   private getCurrentRound(): GameRound {
     return this.game?.rounds?.[this.getRoundCount()];
+  }
+
+  public get isRevealed(): boolean {
+    return this.getCurrentRound()?.isReveal;
   }
 
   public get category(): string {

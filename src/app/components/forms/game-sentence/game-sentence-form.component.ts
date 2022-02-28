@@ -7,7 +7,7 @@ import {
   ValidationErrors,
   AbstractControl,
 } from '@angular/forms';
-import Game from 'src/app/dto/Game';
+import GameRound from 'src/app/dto/GameRound';
 
 function maxSentenceLength(maxSentenceLength: number): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -25,7 +25,7 @@ function maxSentenceLength(maxSentenceLength: number): ValidatorFn {
 })
 export class GameSentenceFormComponent {
   @Input() public isLoading!: boolean;
-  @Output() public onSubmit = new EventEmitter<Game>();
+  @Output() public onSubmit = new EventEmitter<GameRound>();
 
   public error: string | null = null;
 
@@ -72,7 +72,7 @@ export class GameSentenceFormComponent {
     this.onSubmit.emit({
       sentence,
       category,
-    } as Game);
+    } as GameRound);
   }
 
   public hasError(fieldName: string): boolean {

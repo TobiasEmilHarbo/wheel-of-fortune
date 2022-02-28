@@ -34,7 +34,12 @@
     }
 
     &:disabled {
-      background-color: transparent;
+      opacity: 0.5;
+      cursor: default;
+
+      span.content {
+        pointer-events: none;
+      }
     }
 
     span.content {

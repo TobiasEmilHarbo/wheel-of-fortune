@@ -37,6 +37,7 @@ class BlankPosition extends LetterPosition {
 })
 export class SentenceDisplayComponent implements OnInit {
   @Input() public sentence!: string;
+  @Input() public isRevealed!: boolean;
 
   private letterMap: Map<string, Array<LetterPosition>> = new Map();
   private _guesses!: Array<string>;
