@@ -40,7 +40,7 @@ export class GameSentenceFormComponent {
       { value: null, disabled: false },
       [
         Validators.required,
-        Validators.pattern(/^[\p{L}\s\-,]*$/gu),
+        Validators.pattern(/^[\p{L}.,?\s-]+$/u),
         maxSentenceLength(11),
       ]
     ),
@@ -56,7 +56,7 @@ export class GameSentenceFormComponent {
     },
     [this.gameSentenceInput]: {
       required: 'Please enter a sentence',
-      pattern: 'Hello',
+      pattern: 'Please enter valid sentence',
       wordMaxLength: 'Words cannot exceed a length of 11',
     },
   };

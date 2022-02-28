@@ -89,6 +89,9 @@ export class SentenceDisplayComponent implements OnInit {
       const letters = line.flatMap((word, i, arr) => {
         const letters = word.split('').map((character) => {
           const letterPosition = new LetterPosition(character);
+          if (character.match(/[-?.=,]/)?.length) {
+            letterPosition.guessed = true;
+          }
           this.addToLetterMap(letterPosition);
           return letterPosition;
         });
