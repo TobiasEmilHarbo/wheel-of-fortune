@@ -11,8 +11,10 @@
       [sentence]="sentence"
       [guesses]="guesses"
     ></app-game-master-sentence-display>
+
     <br />
     <br />
+
     <app-letter-guess-form
       [isLoading]="gameSentenceLoading"
       (onSubmit)="submitLetterGuess($event)"
@@ -24,12 +26,28 @@
       [isLoading]="revealLoading"
       >Reveal</app-button
     >
+
     <br />
+
     <app-button (click)="endRound()">New Round</app-button>
+
+    <br />
+
+    <app-toggle-button
+      [isLoading]="showLetterGuessesLoading"
+      [checked]="this.game.showLetterGuesses"
+      (click)="toggleShowGuesses()"
+      >Show guessed letters</app-toggle-button
+    >
   </ng-template>
 </div>
 
 <ng-template #playerDisplay>
+  <div class="letter-guesses" *ngIf="this.game?.showLetterGuesses">
+    <span *ngFor="let guess of this.guesses">
+      {{ guess }}
+    </span>
+  </div>
   <h1>{{ category }}</h1>
   <app-sentence-display
     *ngIf="sentence"

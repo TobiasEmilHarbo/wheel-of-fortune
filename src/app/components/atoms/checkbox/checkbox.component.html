@@ -1,0 +1,14 @@
+<label class="checkbox">
+  <input
+    type="checkbox"
+    (click)="check($event)"
+    [value]="value"
+    [checked]="isChecked"
+  />
+  <span class="check-mark" *ngIf="!isLoading; else loading">
+    <app-check-icon [strokeWidth]="3"></app-check-icon>
+  </span>
+  <ng-template #loading>
+    <app-loader-icon [strokeWidth]="2"></app-loader-icon>
+  </ng-template>
+</label>

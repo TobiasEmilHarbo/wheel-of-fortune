@@ -1,0 +1,59 @@
+@import "./../../../../colors";
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: grid;
+  grid-template-columns: auto 56px;
+  align-items: center;
+  justify-items: center;
+  border-radius: 4px;
+  font-size: 14px;
+  letter-spacing: 1px;
+  font-weight: bold;
+  height: 56px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #414141;
+  cursor: pointer;
+  width: 100%;
+
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+
+  &:hover,
+  &:disabled {
+    background-color: $trans-1;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+
+    span.content {
+      pointer-events: none;
+    }
+  }
+
+  span.content {
+    grid-row: 1;
+    grid-column: 1;
+
+    &.hide {
+      opacity: 0;
+    }
+  }
+
+  app-checkbox {
+    grid-row: 1;
+    grid-column: 2;
+    pointer-events: none;
+  }
+}

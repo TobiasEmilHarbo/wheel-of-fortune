@@ -1,0 +1,42 @@
+.checkbox {
+  box-sizing: border-box;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  position: relative;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: solid 3px #dedede;
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  font-size: 0;
+
+  &:hover {
+    background-color: #ececec;
+  }
+}
+
+.checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.check-mark {
+  display: none;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-items: center;
+}
+
+.checkbox input:checked ~ .check-mark {
+  display: grid;
+}

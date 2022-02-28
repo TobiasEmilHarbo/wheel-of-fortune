@@ -25,6 +25,7 @@ export class GameComponent implements OnInit, OnDestroy {
   public gameLoading = true;
   public revealLoading = false;
   public gameSentenceLoading = false;
+  public showLetterGuessesLoading = false;
   public game!: Game;
   private playerId!: string;
   private gameListenerUnsubscribe!: Unsubscribe;
@@ -144,6 +145,18 @@ export class GameComponent implements OnInit, OnDestroy {
 
     this.gameSentenceLoading = false;
     this.letterGuessForm.reset();
+  }
+
+  public async toggleShowGuesses(): Promise<void> {
+    this.showLetterGuessesLoading = true;
+    await setDoc(
+      doc(this.db, PATH.GAMES, this.game.id),
+      {
+        showLetterGuesses: !this.game.showLetterGuesses,
+      } as Game,
+      { merge: true }
+    );
+    this.showLetterGuessesLoading = false;
   }
 
   private getRoundCount(): number {

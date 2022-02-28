@@ -31,6 +31,8 @@ import { FlipLetterComponent } from './components/atoms/flip-letter/flip-letter.
 
 import * as config from './../../firebase-app-config.json';
 import { GameComponent } from './components/pages/game/game.component';
+import { CheckboxComponent } from './components/atoms/checkbox/checkbox.component';
+import { ToggleButtonComponent } from './components/atoms/toggle-button/toggle-button.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +49,8 @@ import { GameComponent } from './components/pages/game/game.component';
     SentenceDisplayComponent,
     FlipLetterComponent,
     GameComponent,
+    CheckboxComponent,
+    ToggleButtonComponent,
   ],
   imports: [
     BrowserModule,
