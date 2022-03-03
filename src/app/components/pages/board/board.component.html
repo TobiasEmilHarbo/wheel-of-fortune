@@ -1,0 +1,14 @@
+<div *ngIf="this.gameState as game">
+  <div class="letter-guesses" *ngIf="game?.showLetterGuesses">
+    <span *ngFor="let guess of game.guesses">
+      {{ guess }}
+    </span>
+  </div>
+  <h1>{{ game.category }}</h1>
+  <app-sentence-display
+    *ngIf="game.sentence"
+    [isRevealed]="game.isRevealed"
+    [sentence]="game.sentence"
+    [guesses]="game.guesses"
+  ></app-sentence-display>
+</div>

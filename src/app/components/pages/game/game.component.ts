@@ -10,7 +10,7 @@ import {
 } from '@angular/fire/firestore';
 import { ActivatedRoute, Data } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { first } from 'rxjs';
+import { first, tap } from 'rxjs';
 import { PATH } from 'src/app/app-routing.module';
 import Game from 'src/app/dto/Game';
 import GameRound from 'src/app/dto/GameRound';
@@ -26,14 +26,15 @@ export class GameComponent implements OnInit, OnDestroy {
   public revealLoading = false;
   public gameSentenceLoading = false;
   public showLetterGuessesLoading = false;
-  public game!: Game;
-  private playerId!: string;
+  public gameState!: Game;
+  public playerId!: string;
   private gameListenerUnsubscribe!: Unsubscribe;
 
   @ViewChild(LetterGuessFormComponent)
   letterGuessForm!: LetterGuessFormComponent;
 
   constructor(
+    private window: Window,
     private db: Firestore,
     private route: ActivatedRoute,
     private cookies: CookieService
@@ -43,32 +44,52 @@ export class GameComponent implements OnInit, OnDestroy {
     const appName = this.db.app.name;
     this.playerId = this.cookies.get(appName);
     this.route.data.pipe(first()).subscribe((routeData: Data) => {
-      const game = routeData[0] as Game;
+      this.gameState = routeData[0];
 
       this.gameListenerUnsubscribe = onSnapshot(
-        doc(this.db, PATH.GAMES, game.id),
+        doc(this.db, PATH.GAMES, this.gameState.id),
         (doc: DocumentSnapshot<DocumentData>) => {
-          this.game = doc.data() as Game;
+          const newGameState = new Game(doc.data() as Game);
+          this.reactToNewGameState(this.gameState, newGameState);
+          this.gameState = newGameState;
           this.gameLoading = false;
         }
       );
     });
   }
 
-  public get isGameMaster(): boolean {
-    return this.playerId == this.game?.gameMaster;
-  }
-
   public ngOnDestroy(): void {
     this.gameListenerUnsubscribe?.();
   }
 
+  public openGameBoard(): void {
+    this.window.open(
+      `${PATH.GAMES}/${this.gameState.id}/${PATH.BOARD}`,
+      'Wheel of fortune',
+      'popup'
+    );
+  }
+
+  public reactToNewGameState(oldGameState: Game, newGameState: Game) {
+    // const consonantsRemaining = newGameState.consonantsRemaining;
+    // if (
+    //   oldGameState != null &&
+    //   consonantsRemaining.length != oldGameState.consonantsRemaining.length &&
+    //   consonantsRemaining.length < 1
+    // ) {
+    //   const audio = new Audio();
+    //   audio.src = 'assets/sounds/only-vowels-left.mp3';
+    //   audio.load();
+    //   audio.play();
+    // }
+  }
+
   public async revealSentence(): Promise<void> {
     this.revealLoading = true;
-    const currentRound = this.getRoundCount();
+    const currentRound = this.gameState.getRoundCount();
 
     await setDoc(
-      doc(this.db, PATH.GAMES, this.game.id),
+      doc(this.db, PATH.GAMES, this.gameState.id),
       {
         rounds: {
           [currentRound]: {
@@ -85,10 +106,10 @@ export class GameComponent implements OnInit, OnDestroy {
   public async startRound(game: GameRound): Promise<void> {
     this.gameLoading = true;
 
-    const currentRound = this.getRoundCount();
+    const currentRound = this.gameState.getRoundCount();
 
     await setDoc(
-      doc(this.db, PATH.GAMES, this.game.id),
+      doc(this.db, PATH.GAMES, this.gameState.id),
       {
         rounds: {
           [currentRound]: {
@@ -102,13 +123,13 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   public async endRound(): Promise<void> {
-    const currentRound = this.getRoundCount() + 1;
+    const nextRound = this.gameState.getRoundCount() + 1;
 
     await setDoc(
-      doc(this.db, PATH.GAMES, this.game.id),
+      doc(this.db, PATH.GAMES, this.gameState.id),
       {
         rounds: {
-          [currentRound]: {},
+          [nextRound]: {},
         },
       } as Game,
       { merge: true }
@@ -118,21 +139,20 @@ export class GameComponent implements OnInit, OnDestroy {
   public async submitLetterGuess(letter: string): Promise<void> {
     this.gameSentenceLoading = true;
 
-    const round = this.getCurrentRound();
+    const currentRound = this.gameState.getCurrentRound();
 
-    if (round.guesses?.includes(letter)) {
+    if (currentRound.guesses?.includes(letter)) {
       this.gameSentenceLoading = false;
       this.letterGuessForm.reset();
       return;
     }
 
-    const currentRoundCount = this.getRoundCount();
-    const currentRound = this.game.rounds[currentRoundCount];
+    const currentRoundCount = this.gameState.getRoundCount();
 
     const previousGuesses = currentRound?.guesses ? currentRound.guesses : [];
 
     await setDoc(
-      doc(this.db, PATH.GAMES, this.game.id),
+      doc(this.db, PATH.GAMES, this.gameState.id),
       {
         rounds: {
           [currentRoundCount]: {
@@ -150,36 +170,12 @@ export class GameComponent implements OnInit, OnDestroy {
   public async toggleShowGuesses(): Promise<void> {
     this.showLetterGuessesLoading = true;
     await setDoc(
-      doc(this.db, PATH.GAMES, this.game.id),
+      doc(this.db, PATH.GAMES, this.gameState.id),
       {
-        showLetterGuesses: !this.game.showLetterGuesses,
+        showLetterGuesses: !this.gameState.showLetterGuesses,
       } as Game,
       { merge: true }
     );
     this.showLetterGuessesLoading = false;
-  }
-
-  private getRoundCount(): number {
-    return Object.keys(this.game?.rounds ?? {}).length;
-  }
-
-  private getCurrentRound(): GameRound {
-    return this.game?.rounds?.[this.getRoundCount()];
-  }
-
-  public get isRevealed(): boolean {
-    return this.getCurrentRound()?.isReveal;
-  }
-
-  public get category(): string {
-    return this.getCurrentRound()?.category;
-  }
-
-  public get sentence(): string {
-    return this.getCurrentRound()?.sentence;
-  }
-
-  public get guesses(): Array<string> {
-    return this.getCurrentRound()?.guesses;
   }
 }

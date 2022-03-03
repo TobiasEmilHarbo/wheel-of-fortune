@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { PATH } from 'src/app/app-routing.module';
 import Game from 'src/app/dto/Game';
-import GameRound from 'src/app/dto/GameRound';
 
 @Component({
   selector: 'app-home',

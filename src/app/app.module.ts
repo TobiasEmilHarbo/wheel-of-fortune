@@ -33,6 +33,7 @@ import * as config from './../../firebase-app-config.json';
 import { GameComponent } from './components/pages/game/game.component';
 import { CheckboxComponent } from './components/atoms/checkbox/checkbox.component';
 import { ToggleButtonComponent } from './components/atoms/toggle-button/toggle-button.component';
+import { BoardComponent } from './components/pages/board/board.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { ToggleButtonComponent } from './components/atoms/toggle-button/toggle-b
     GameComponent,
     CheckboxComponent,
     ToggleButtonComponent,
+    BoardComponent,
   ],
   imports: [
     BrowserModule,
@@ -66,7 +68,12 @@ import { ToggleButtonComponent } from './components/atoms/toggle-button/toggle-b
     provideMessaging(() => getMessaging()),
     providePerformance(() => getPerformance()),
   ],
-  providers: [ScreenTrackingService, UserTrackingService, CookieService],
+  providers: [
+    ScreenTrackingService,
+    UserTrackingService,
+    CookieService,
+    { provide: Window, useValue: window },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
