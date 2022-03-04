@@ -49,9 +49,7 @@ export class GameComponent implements OnInit, OnDestroy {
       this.gameListenerUnsubscribe = onSnapshot(
         doc(this.db, PATH.GAMES, this.gameState.id),
         (doc: DocumentSnapshot<DocumentData>) => {
-          const newGameState = new Game(doc.data() as Game);
-          this.reactToNewGameState(this.gameState, newGameState);
-          this.gameState = newGameState;
+          this.gameState = new Game(doc.data() as Game);
           this.gameLoading = false;
         }
       );
@@ -68,20 +66,6 @@ export class GameComponent implements OnInit, OnDestroy {
       'Wheel of fortune',
       'popup'
     );
-  }
-
-  public reactToNewGameState(oldGameState: Game, newGameState: Game) {
-    // const consonantsRemaining = newGameState.consonantsRemaining;
-    // if (
-    //   oldGameState != null &&
-    //   consonantsRemaining.length != oldGameState.consonantsRemaining.length &&
-    //   consonantsRemaining.length < 1
-    // ) {
-    //   const audio = new Audio();
-    //   audio.src = 'assets/sounds/only-vowels-left.mp3';
-    //   audio.load();
-    //   audio.play();
-    // }
   }
 
   public async revealSentence(): Promise<void> {
