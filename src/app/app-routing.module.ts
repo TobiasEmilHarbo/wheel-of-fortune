@@ -4,6 +4,7 @@ import { BoardComponent } from './components/pages/board/board.component';
 import { GameComponent } from './components/pages/game/game.component';
 import { HomeComponent } from './components/pages/home/home.component';
 import { GameGuard } from './guards/game.guard';
+import { SoundResolver } from './resolvers/sound.resolver';
 
 export enum PATH {
   GAMES = 'games',
@@ -23,7 +24,10 @@ const routes: Routes = [
   {
     path: `${PATH.GAMES}/:id/${PATH.BOARD}`,
     component: BoardComponent,
-    resolve: [GameGuard],
+    resolve: {
+      game: GameGuard,
+      sounds: SoundResolver,
+    },
   },
 ];
 

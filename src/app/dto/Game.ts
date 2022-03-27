@@ -7,10 +7,10 @@ export default class Game {
   rounds!: { [count: number]: GameRound };
 
   constructor(dto: Game) {
-    this.id = dto.id;
-    this.gameMaster = dto.gameMaster;
-    this.rounds = dto.rounds;
-    this.showLetterGuesses = dto.showLetterGuesses;
+    this.id = dto?.id;
+    this.gameMaster = dto?.gameMaster;
+    this.rounds = dto?.rounds;
+    this.showLetterGuesses = dto?.showLetterGuesses;
   }
 
   public isGameMaster(playerId: string): boolean {
@@ -41,7 +41,7 @@ export default class Game {
     return this.getCurrentRound()?.guesses;
   }
 
-  public get consonantsRemaining(): Array<string> {
+  public getConsonantsRemaining(): Array<string> {
     return (this.sentence?.match(/[QWRTPSDFGHJKLZXCVBNM]/g) ?? []).filter(
       (letter) => {
         return !this.guesses?.includes(letter) && letter.match(/[A-Z]/g);

@@ -8,9 +8,10 @@ import {
   Unsubscribe,
 } from '@angular/fire/firestore';
 import { ActivatedRoute, Data } from '@angular/router';
-import { combineLatest, first, map, Observable, of, switchMap } from 'rxjs';
+import { first } from 'rxjs';
 import { PATH } from 'src/app/app-routing.module';
 import Game from 'src/app/dto/Game';
+import { SOUNDS } from 'src/app/resolvers/sound.resolver';
 
 @Component({
   selector: 'app-board',
@@ -19,16 +20,19 @@ import Game from 'src/app/dto/Game';
 })
 export class BoardComponent implements OnInit, OnDestroy {
   public gameLoading = true;
-
+  public audioLoading = true;
   public gameState!: Game;
   private gameListenerUnsubscribe!: Unsubscribe;
+  private sounds!: {
+    [title: string]: HTMLAudioElement;
+  };
 
   constructor(private route: ActivatedRoute, private db: Firestore) {}
 
   public ngOnInit(): void {
     this.route.data.pipe(first()).subscribe((routeData: Data) => {
-      this.gameState = routeData[0];
-      console.log(this.gameState);
+      this.sounds = routeData['sounds'];
+      this.gameState = routeData['game'];
       this.gameListenerUnsubscribe = onSnapshot(
         doc(this.db, PATH.GAMES, this.gameState.id),
         (doc: DocumentSnapshot<DocumentData>) => {
@@ -46,16 +50,28 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   public reactToNewGameState(oldGameState: Game, newGameState: Game) {
-    const consonantsRemaining = newGameState.consonantsRemaining;
+    const oldGuesses = oldGameState.guesses;
+    const newGuesses = newGameState.guesses;
+
+    const guess = newGuesses?.filter(
+      (letter) => !oldGuesses?.includes(letter)
+    )[0];
+
+    const consonantsRemaining = newGameState.getConsonantsRemaining();
+
     if (
       oldGameState != null &&
-      consonantsRemaining.length != oldGameState.consonantsRemaining.length &&
+      consonantsRemaining.length !=
+        oldGameState.getConsonantsRemaining().length &&
       consonantsRemaining.length < 1
     ) {
-      const audio = new Audio();
-      audio.src = 'assets/sounds/only-vowels-left.mp3';
-      audio.load();
-      audio.play();
+      this.sounds[SOUNDS.ONLY_VOWELS_LEFT].play();
+    } else if (!!guess) {
+      if (!oldGameState.sentence.includes(guess)) {
+        this.sounds[SOUNDS.WRONG_GUESS].play();
+      } else {
+        this.sounds[SOUNDS.CORRECT_GUESS].play();
+      }
     }
   }
 }
