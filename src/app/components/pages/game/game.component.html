@@ -1,67 +1,72 @@
-<div *ngIf="this.gameState as game">
-  <div *ngIf="game.isGameMaster(this.playerId); else playerDisplay">
-    <div *ngIf="!game.sentence; else gameStart">
-      <app-game-sentence-form
-        (onSubmit)="startRound($event)"
-        [isLoading]="gameLoading"
-      ></app-game-sentence-form>
+<div *ngIf="this.gameState as game" class="game">
+  <ng-container *ngIf="game.isGameMaster(this.playerId); else playerDisplay">
+    <div class="master-game-board">
+      <div *ngIf="!game.sentence; else gameStart">
+        <app-game-sentence-form
+          (onSubmit)="startRound($event)"
+          [isLoading]="gameLoading"
+        ></app-game-sentence-form>
+      </div>
+
+      <ng-template #gameStart>
+        <app-game-master-sentence-display
+          [sentence]="game.sentence"
+          [guesses]="game.guesses"
+        ></app-game-master-sentence-display>
+
+        <br />
+        <br />
+
+        <app-letter-guess-form
+          [disabled]="game.isRevealed || game.isSentenceGuessed"
+          [isLoading]="gameSentenceLoading"
+          (onSubmit)="submitLetterGuess($event)"
+        ></app-letter-guess-form>
+
+        <app-button
+          [disabled]="game.isRevealed || game.isSentenceGuessed"
+          (click)="revealSentence()"
+          [isLoading]="revealLoading"
+          >Reveal</app-button
+        >
+
+        <br />
+
+        <app-button (click)="endRound()">New Round</app-button>
+
+        <br />
+
+        <app-toggle-button
+          [isLoading]="showLetterGuessesLoading"
+          [checked]="game.showLetterGuesses"
+          (click)="toggleShowGuesses()"
+          >Show guessed letters</app-toggle-button
+        >
+
+        <br />
+        <br />
+        <br />
+
+        <app-button (click)="openGameBoard()">Open Game Board</app-button>
+      </ng-template>
     </div>
-
-    <ng-template #gameStart>
-      <app-game-master-sentence-display
-        [sentence]="game.sentence"
-        [guesses]="game.guesses"
-      ></app-game-master-sentence-display>
-
-      <br />
-      <br />
-
-      <app-letter-guess-form
-        [isLoading]="gameSentenceLoading"
-        (onSubmit)="submitLetterGuess($event)"
-      ></app-letter-guess-form>
-
-      <app-button
-        [disabled]="game.isRevealed"
-        (click)="revealSentence()"
-        [isLoading]="revealLoading"
-        >Reveal</app-button
-      >
-
-      <br />
-
-      <app-button (click)="endRound()">New Round</app-button>
-
-      <br />
-
-      <app-toggle-button
-        [isLoading]="showLetterGuessesLoading"
-        [checked]="game.showLetterGuesses"
-        (click)="toggleShowGuesses()"
-        >Show guessed letters</app-toggle-button
-      >
-
-      <br />
-      <br />
-      <br />
-
-      <app-button (click)="openGameBoard()">Open Game Board</app-button>
-    </ng-template>
-  </div>
+  </ng-container>
 
   <ng-template #playerDisplay>
-    <div class="letter-guesses" *ngIf="game?.showLetterGuesses">
-      <span *ngFor="let guess of game.guesses">
-        {{ guess }}
-      </span>
+    <div class="player-display">
+      <div class="letter-guesses" *ngIf="game?.showLetterGuesses">
+        <span *ngFor="let guess of game.guesses">
+          {{ guess }}
+        </span>
+      </div>
+      <h1>{{ game.category }}</h1>
+      <app-sentence-display
+        *ngIf="game.sentence"
+        [isRevealed]="game.isRevealed"
+        [sentence]="game.sentence"
+        [guesses]="game.guesses"
+      ></app-sentence-display>
     </div>
-    <h1>{{ game.category }}</h1>
-    <app-sentence-display
-      *ngIf="game.sentence"
-      [isRevealed]="game.isRevealed"
-      [sentence]="game.sentence"
-      [guesses]="game.guesses"
-    ></app-sentence-display>
   </ng-template>
 </div>
 

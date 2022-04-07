@@ -1,9 +1,19 @@
-<app-flip-letter
-  *ngFor="let letter of letterPositions"
-  [ngClass]="{
-    reveal: letter.guessed || (isRevealed && !letter.isBlack),
-    'light-up': letter.guessed || (isRevealed && !letter.isBlack),
-    blank: letter.isBlack
-  }"
-  >{{ letter.character }}</app-flip-letter
->
+<aside>
+  <app-flip-letter class="blank"></app-flip-letter>
+  <app-flip-letter class="blank"></app-flip-letter>
+</aside>
+<div class="inner-board">
+  <app-flip-letter
+    *ngFor="let letter of letterPositions"
+    [ngClass]="{
+      reveal: letter.guessed || (isRevealed && !letter.isBlack),
+      'light-up': letter.guessed || (isRevealed && !letter.isBlack),
+      blank: letter.isBlack
+    }"
+    >{{ letter.character }}</app-flip-letter
+  >
+</div>
+<aside>
+  <app-flip-letter class="blank"></app-flip-letter>
+  <app-flip-letter class="blank"></app-flip-letter>
+</aside>

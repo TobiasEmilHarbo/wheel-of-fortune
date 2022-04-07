@@ -41,6 +41,15 @@ export default class Game {
     return this.getCurrentRound()?.guesses;
   }
 
+  public get isSentenceGuessed(): boolean {
+    return (
+      !!this.guesses?.length &&
+      !this.sentence?.split('').find((letter: string) => {
+        return !this.guesses?.includes(letter) && letter.match(/\p{L}/u);
+      })?.length
+    );
+  }
+
   public getConsonantsRemaining(): Array<string> {
     return (this.sentence?.match(/[QWRTPSDFGHJKLZXCVBNM]/g) ?? []).filter(
       (letter) => {

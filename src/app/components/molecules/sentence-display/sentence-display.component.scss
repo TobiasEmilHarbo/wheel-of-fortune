@@ -1,5 +1,25 @@
 :host {
   display: grid;
-  grid-template-columns: repeat(11, auto);
-  gap: 8px;
+  grid-template-columns: auto 1fr auto;
+
+  aside {
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+    gap: 8px;
+    margin: 0 8px;
+
+    app-flip-letter:nth-child(1) {
+      grid-row: 2;
+    }
+
+    app-flip-letter:nth-child(2) {
+      grid-row: 3;
+    }
+  }
+
+  div.inner-board {
+    display: grid;
+    grid-template-columns: repeat(11, auto);
+    gap: 8px;
+  }
 }

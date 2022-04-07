@@ -1,8 +1,18 @@
 @use "./../../../../colors.scss" as *;
 
-p {
-  text-align: center;
-  font-style: italic;
-  font-weight: bold;
-  color: $grey-5;
+:host {
+  display: grid;
+  grid-template-columns: auto 560px auto;
+  justify-content: center;
+
+  app-button {
+    grid-column: 2;
+  }
+
+  p {
+    text-align: center;
+    font-style: italic;
+    font-weight: bold;
+    color: $grey-5;
+  }
 }

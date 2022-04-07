@@ -14,7 +14,7 @@ export class LetterGuessFormComponent {
   public letterInput: string = 'letter';
 
   public form: FormGroup = new FormGroup({
-    [this.letterInput]: new FormControl({ value: null, disabled: false }, [
+    [this.letterInput]: new FormControl({ value: null }, [
       Validators.required,
       Validators.maxLength(1),
       Validators.pattern(/\p{L}/u),
@@ -35,6 +35,14 @@ export class LetterGuessFormComponent {
 
   public get isLoading(): boolean {
     return this._isLoading;
+  }
+
+  @Input() public set disabled(disabled: boolean | undefined) {
+    if (disabled) {
+      this.form.disable();
+    } else {
+      this.form.enable();
+    }
   }
 
   @Input() public set isLoading(loading: boolean) {
