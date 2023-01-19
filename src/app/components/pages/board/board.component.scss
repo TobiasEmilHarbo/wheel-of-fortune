@@ -13,4 +13,14 @@
     font-size: larger;
     text-align: center;
   }
+
+  div.webcam-screen {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+
+    justify-items: center;
+    align-items: end;
+  }
 }

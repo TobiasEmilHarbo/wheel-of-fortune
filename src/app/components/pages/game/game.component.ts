@@ -10,10 +10,11 @@ import {
 } from '@angular/fire/firestore';
 import { ActivatedRoute, Data } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { first } from 'rxjs';
+import { first, from, Observable } from 'rxjs';
 import { PATH } from 'src/app/app-routing.module';
 import Game from 'src/app/dto/Game';
 import GameRound from 'src/app/dto/GameRound';
+import { WebcamService } from 'src/app/services/webcam.service';
 import { LetterGuessFormComponent } from '../../forms/letter-guess/letter-guess-form.component';
 
 @Component({
@@ -26,8 +27,11 @@ export class GameComponent implements OnInit, OnDestroy {
   public revealLoading = false;
   public gameSentenceLoading = false;
   public showLetterGuessesLoading = false;
+  public showWebcamLoading = false;
   public gameState!: Game;
   public playerId!: string;
+  public webcams: Observable<Array<MediaDeviceInfo>>;
+
   private gameListenerUnsubscribe!: Unsubscribe;
 
   @ViewChild(LetterGuessFormComponent)
@@ -37,12 +41,16 @@ export class GameComponent implements OnInit, OnDestroy {
     private window: Window,
     private db: Firestore,
     private route: ActivatedRoute,
-    private cookies: CookieService
-  ) {}
+    private cookies: CookieService,
+    private webcamService: WebcamService,
+  ) {
+    this.webcams = from(this.webcamService.getWebcams());
+  }
 
   public ngOnInit(): void {
     const appName = this.db.app.name;
     this.playerId = this.cookies.get(appName);
+
     this.route.data.pipe(first()).subscribe((routeData: Data) => {
       this.gameState = routeData[0];
 
@@ -60,12 +68,16 @@ export class GameComponent implements OnInit, OnDestroy {
     this.gameListenerUnsubscribe?.();
   }
 
-  public openGameBoard(): void {
-    this.window.open(
-      `${PATH.GAMES}/${this.gameState.id}/${PATH.BOARD}`,
-      'Wheel of fortune',
-      'popup'
-    );
+  public async openGameBoard(): Promise<Window | null> {
+    return new Promise((resolve) => {
+      const board = this.window.open(
+        `${PATH.GAMES}/${this.gameState.id}/${PATH.BOARD}`,
+        'Wheel of fortune',
+        'popup'
+      );
+
+      resolve(board)
+    })
   }
 
   public async revealSentence(): Promise<void> {
@@ -161,5 +173,31 @@ export class GameComponent implements OnInit, OnDestroy {
       { merge: true }
     );
     this.showLetterGuessesLoading = false;
+  }
+
+  public async toggleWebcam(): Promise<void> {
+    this.showWebcamLoading = true;
+    await setDoc(
+      doc(this.db, PATH.GAMES, this.gameState.id),
+      {
+        showWebcam: !this.gameState.showWebcam,
+      } as Game,
+      { merge: true }
+    )
+    this.showWebcamLoading = false;
+  }
+
+  public async chooseWebcam(webcamId: string): Promise<void> {
+    if (!this.gameState.showWebcam) return
+
+    const board = await this.openGameBoard();
+
+    setTimeout(() => {
+      const event = new CustomEvent("switchWebcam", {
+        cancelable: true,
+        detail: webcamId
+      });
+      board?.dispatchEvent(event);
+    }, 1000)
   }
 }

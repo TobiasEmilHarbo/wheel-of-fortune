@@ -12,6 +12,7 @@ import { first } from 'rxjs';
 import { PATH } from 'src/app/app-routing.module';
 import Game from 'src/app/dto/Game';
 import { SOUNDS } from 'src/app/resolvers/sound.resolver';
+import { WebcamService } from 'src/app/services/webcam.service';
 
 @Component({
   selector: 'app-board',
@@ -27,7 +28,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     [title: string]: HTMLAudioElement;
   };
 
-  constructor(private route: ActivatedRoute, private db: Firestore) {}
+  constructor(private route: ActivatedRoute, private db: Firestore, private window: Window, private webcamService: WebcamService) {}
 
   public ngOnInit(): void {
     this.route.data.pipe(first()).subscribe((routeData: Data) => {
@@ -42,6 +43,10 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.gameLoading = false;
         }
       );
+    });
+
+    this.window.addEventListener("switchWebcam", (event) => {
+      this.webcamService.setCamera((<any>event).detail);
     });
   }
 

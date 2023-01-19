@@ -1,0 +1,11 @@
+@import "./../../../../colors";
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  padding: 16px;
+  border: 1px solid #eeeff1;
+  border-radius: 8px;
+}

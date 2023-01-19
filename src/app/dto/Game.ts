@@ -4,6 +4,7 @@ export default class Game {
   id!: string;
   gameMaster!: string;
   showLetterGuesses!: boolean;
+  showWebcam!: boolean;
   rounds!: { [count: number]: GameRound };
 
   constructor(dto: Game) {
@@ -11,6 +12,7 @@ export default class Game {
     this.gameMaster = dto?.gameMaster;
     this.rounds = dto?.rounds;
     this.showLetterGuesses = dto?.showLetterGuesses;
+    this.showWebcam = dto?.showWebcam;
   }
 
   public isGameMaster(playerId: string): boolean {

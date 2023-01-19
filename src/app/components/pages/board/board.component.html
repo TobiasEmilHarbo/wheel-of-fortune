@@ -1,14 +1,24 @@
-<div *ngIf="this.gameState as game">
-  <div class="letter-guesses" *ngIf="game?.showLetterGuesses">
-    <span *ngFor="let guess of game.guesses">
-      {{ guess }}
-    </span>
+<ng-container *ngIf="this.gameState as game">
+  <div>
+    <div class="letter-guesses" *ngIf="game?.showLetterGuesses">
+      <span *ngFor="let guess of game.guesses">
+        {{ guess }}
+      </span>
+    </div>
+
+    <h1>{{ game.category }}</h1>
+
+    <app-sentence-display
+      *ngIf="game.sentence"
+      [isRevealed]="game.isRevealed"
+      [sentence]="game.sentence"
+      [guesses]="game.guesses"
+    ></app-sentence-display>
+
+
   </div>
-  <h1>{{ game.category }}</h1>
-  <app-sentence-display
-    *ngIf="game.sentence"
-    [isRevealed]="game.isRevealed"
-    [sentence]="game.sentence"
-    [guesses]="game.guesses"
-  ></app-sentence-display>
-</div>
+
+  <div class="webcam-screen" *ngIf="game.showWebcam">
+    <app-webcam></app-webcam>
+  </div>
+</ng-container>

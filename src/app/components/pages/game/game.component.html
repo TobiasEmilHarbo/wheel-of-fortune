@@ -48,6 +48,26 @@
         <br />
 
         <app-button (click)="openGameBoard()">Open Game Board</app-button>
+
+        <br />
+
+        <app-area *ngIf="(webcams | async) as webcams">
+
+          <app-toggle-button
+            [isLoading]="showWebcamLoading"
+            [checked]="game.showWebcam"
+            (click)="toggleWebcam()"
+            >Show webcam</app-toggle-button
+          >
+
+          <div *ngFor="let webcam of webcams">
+            <br />
+            <app-button (click)="chooseWebcam(webcam.deviceId)" [disabled]="!game.showWebcam">
+              {{ webcam.label }}
+            </app-button>
+          </div>
+        </app-area>
+
       </ng-template>
     </div>
   </ng-container>

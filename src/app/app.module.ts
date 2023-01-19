@@ -34,6 +34,9 @@ import { GameComponent } from './components/pages/game/game.component';
 import { CheckboxComponent } from './components/atoms/checkbox/checkbox.component';
 import { ToggleButtonComponent } from './components/atoms/toggle-button/toggle-button.component';
 import { BoardComponent } from './components/pages/board/board.component';
+import { WebcamModule } from 'ngx-webcam';
+import { WebcamComponent } from './components/webcam/webcam.component';
+import { AreaComponent } from './components/atoms/area/area.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +56,8 @@ import { BoardComponent } from './components/pages/board/board.component';
     CheckboxComponent,
     ToggleButtonComponent,
     BoardComponent,
+    WebcamComponent,
+    AreaComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,6 +65,7 @@ import { BoardComponent } from './components/pages/board/board.component';
     ReactiveFormsModule,
     FormsModule,
     IconsModule,
+    WebcamModule,
     provideFirebaseApp(() => initializeApp(config)),
     provideFirestore(() => getFirestore()),
     provideAnalytics(() => getAnalytics()),
